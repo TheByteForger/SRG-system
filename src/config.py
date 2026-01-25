@@ -2,11 +2,15 @@ import os
 import random
 import numpy as np
 import pandas as pd
+import torch
 
-DATASET_ROOT = os.path.join("..","esc-50", "audio", "audio", "44100")
-METADATA_PATH = os.path.join("..","esc-50", "esc50.csv")
+DATASET_ROOT = r"C:\Users\Acer\Desktop\SRG\esc-50\audio\audio\44100"
+METADATA_PATH = r"C:\Users\Acer\Desktop\SRG\esc-50\esc50.csv"
 MODEL_SAVE_PATH = os.path.join("models", "home_environment_sound.pth")
 LABEL_SAVE_PATH = os.path.join("models", "labels.npy")
+BASE_DIR = r"C:\Users\Acer\Desktop\SRG"
+MFCC_PATH = os.path.join(BASE_DIR, "MFCCS.npy")
+NP_LABELS_PATH = os.path.join(BASE_DIR, "LABELS.npy")
 
 TARGET_CLASSES = [
     'crackling_fire',
@@ -42,8 +46,9 @@ N_MELS = 13
 BATCH_SIZE = 16
 EPOCHS = 20
 LEARNING_RATE = 0.001
-N_MFCCS = 40
+N_MFCCS = 13
 
+DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 decoder = {0: 'crackling_fire', 
            1: 'rain', 

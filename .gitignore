@@ -7,3 +7,5 @@ __pycache__/
 
 # Optional temp files
 .DS_Store
+
+*.npy

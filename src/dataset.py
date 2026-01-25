@@ -26,12 +26,34 @@ def normalize_mfcc(mfcc):
     normalized_mfccs = (mfcc - mean)/std
     return normalized_mfccs
 
-mfcc = []
-for file in all_files:
-    audio, sr = librosa.load(file, sr=config.SAMPLE_RATE)
-    mfccs = compute_mfcc_from_audio(audio)
-    mfcc.append(mfccs)
-mfcc_array = np.array(mfcc)
-normalized_mfcc_array = np.array([normalize_mfcc(i) for i in mfcc_array])
 
-print(f"first normalized mfcc: {normalized_mfcc_array[0]}")
+if os.path.exists("MFCCS.npy") and os.path.exists("LABELS.npy"):
+    MFCCs = np.load("MFCCS.npy")
+    Labels = np.load("LABELS.npy")
+else:
+    mfcc_list = []
+    labels = []
+    dataset = config.dataset
+    encoded_label = config.encoder
+    sr = config.SAMPLE_RATE
+    for file, class_name in zip(all_files, dataset['category']):
+        label = encoded_label[class_name]
+        audio, _ = librosa.load(file, sr=sr)
+        mfcc = compute_mfcc_from_audio(audio)
+        mfcc_list.append(normalize_mfcc(mfcc))
+        labels.append(label)
+    mfcc_list = np.array(mfcc_list, dtype=np.float32)
+    mfcc_list = mfcc_list[:, np.newaxis, :, :]
+    labels = np.array(labels, dtype= np.int64)
+
+    np.save(config.MFCC_PATH, mfcc_list)
+    np.save(config.NP_LABELS_PATH, labels)
+
+
+    print(f"First MFCC shape: {mfcc_list[0].shape}")
+    print(f"First MFCC sample:\n{mfcc_list[0]}")
+    print(f"First label: {labels[0]}")
+
+
+
+
