@@ -29,7 +29,9 @@ def normalize_mfcc(mfcc):
 mfcc = []
 for file in all_files:
     audio, sr = librosa.load(file, sr=config.SAMPLE_RATE)
-    mfccs = compute_mfcc_from_audio(all_files)
-    mfcc.append(mfcc)
-mfcc = np.array(mfcc)
-normalized_mfcc = normalize_mfcc(mfccs)
+    mfccs = compute_mfcc_from_audio(audio)
+    mfcc.append(mfccs)
+mfcc_array = np.array(mfcc)
+normalized_mfcc_array = np.array([normalize_mfcc(i) for i in mfcc_array])
+
+print(f"first normalized mfcc: {normalized_mfcc_array[0]}")

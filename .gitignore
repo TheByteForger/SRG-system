@@ -1,0 +1,9 @@
+# Ignore audio files
+*.wav
+
+# Ignore Python cache
+*.pyc
+__pycache__/
+
+# Optional temp files
+.DS_Store
