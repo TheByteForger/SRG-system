@@ -24,7 +24,7 @@ TARGET_CLASSES = [
     'dog',
     'cat'
 ]
-
+NUM_CLASSES = len(TARGET_CLASSES)
 dataset = pd.read_csv(METADATA_PATH)
 dataset = dataset[dataset['category'].isin(TARGET_CLASSES)]
 all_files = [os.path.join(DATASET_ROOT, f) for f in dataset['filename']]
@@ -46,7 +46,7 @@ N_MELS = 13
 BATCH_SIZE = 16
 EPOCHS = 20
 LEARNING_RATE = 0.001
-N_MFCCS = 13
+N_MFCCS = 40
 
 DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 

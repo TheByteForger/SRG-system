@@ -28,7 +28,7 @@ class HomeAudioCNN(nn.Module):
         self.flatten = nn.Flatten()
         
         self.classifier = nn.Sequential(
-            nn.Linear(64 * 5 * 5 * 128),
+            nn.Linear(64 * 5 * 5 , 128),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(128, num_classes)
