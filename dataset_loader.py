@@ -6,15 +6,39 @@ from sklearn.model_selection import train_test_split
 import src.config as config
 
 class MFCCDataset(Dataset):
-    def __init__(self, X, y):
+    def __init__(self, X, y, augment=False, freq_mask_param = 5, time_mask_param = 20):
         self.X = torch.tensor(X, dtype=torch.float32)
         self.y = torch.tensor(y, dtype=torch.long)
+        self.augment = augment
+        self.freq_mask_param = freq_mask_param
+        self.time_mask_param = time_mask_param
+        
 
     def __len__(self):
         return len(self.y)
 
     def __getitem__(self, idx):
-        return self.X[idx], self.y[idx]
+        mfcc = self.X[idx].clone()
+        label = self.y[idx]
+
+        if self.augment:
+            mfcc = self.spec_augment(mfcc)
+        return mfcc, label
+    
+    def spec_augment(self, mfcc):
+        n_mfcc = mfcc.shape[1]
+        n_frames = mfcc.shape[2]
+
+        f = np.random.randint(0, self.freq_mask_param + 1)
+        f0 = np.random.randint(0, max(1, n_mfcc - f))
+        mfcc[:, f0:f0+f, :] = 0
+
+        t = np.random.randint(0, self.time_mask_param + 1)
+        t0 = np.random.randint(0, max(1, n_frames - t)) 
+        mfcc[:, :, t0:t0+t] = 0
+
+        return mfcc
+
 
 
 def get_dataloaders(batch_size=config.BATCH_SIZE, mfcc_file="MFCCS.npy", labels_file="LABELS.npy"):
@@ -34,10 +58,9 @@ def get_dataloaders(batch_size=config.BATCH_SIZE, mfcc_file="MFCCS.npy", labels_
     )
 
 
-    train_dataset = MFCCDataset(X_train, y_train)
-    val_dataset   = MFCCDataset(X_val, y_val)
-    test_dataset  = MFCCDataset(X_test, y_test)
-
+    train_dataset = MFCCDataset(X_train, y_train, augment= True)
+    val_dataset   = MFCCDataset(X_val, y_val, augment= False)
+    test_dataset  = MFCCDataset(X_test, y_test, augment= False)
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader   = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)

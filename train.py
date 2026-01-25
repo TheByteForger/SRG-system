@@ -69,40 +69,38 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
 
     return avg_loss, avg_acc
 
-# @torch.no_grad()
-# def validate(model, loader, criterion, device):
-#     model.eval()
+@torch.no_grad()
+def validate(model, loader, criterion, device):
+    model.eval()
     
-#     val_loss = 0.0
-#     val_acc = 0.0
+    total_loss = 0.0
+    total_correct = 0
+    total_samples = 0
     
-#     for batch_X, batch_y in loader:
-#         batch_X = batch_X.to(device)
-#         batch_y = batch_y.to(device)
+    for batch_X, batch_y in loader:
+        batch_X = batch_X.to(device)
+        batch_y = batch_y.to(device)
 
-#         outputs = model(batch_X)
-#         loss = criterion(outputs, batch_y)
+        outputs = model(batch_X)
+        loss = criterion(outputs, batch_y)
 
-#         val_loss += loss.item()
-#         val_acc += accuracy(outputs, batch_y).item()
+        total_loss += loss.item()
+        correct, samples = accuracy(outputs, batch_y)
+        total_correct += correct
+        total_samples += samples
 
-#     return val_loss / len(train_loader), val_acc / len(train_loader)
+    avg_loss = total_loss / len(loader)
+    avg_acc = total_correct / total_samples
+    return avg_loss, avg_acc
 
-
+best_val_acc = 0.0
 for epoch in range(config.EPOCHS):
-    train_loss, train_acc = train_one_epoch(
-        model,
-        train_loader,
-        optimizer,
-        criterion,
-        device
-    )
+    train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, device)
+    val_loss, val_acc = validate(model, val_loader, criterion, device)  
 
     print(
         f"Epoch [{epoch+1}/{config.EPOCHS}] "
-        f"Loss: {train_loss:.4f} | Acc: {train_acc:.4f}"
+        f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} "
+        f"Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}"
     )
 
-
-out = model(batch_X)
-print(out.shape)

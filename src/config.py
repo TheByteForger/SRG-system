@@ -33,7 +33,12 @@ SEED = 42
 def seed_everything(): 
     random.seed(SEED) 
     os.environ['PYTHONHASHSEED'] = str(SEED) 
-    np.random.seed(SEED) 
+    np.random.seed(SEED)
+    torch.manual_seed(SEED)
+    torch.cuda.manual_seed(SEED)
+    torch.cuda.manual_seed_all(SEED)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 SAMPLE_RATE = 16000
 DURATION = 3.0
@@ -44,7 +49,7 @@ HOP_LENGTH = 256
 N_MELS = 13
 
 BATCH_SIZE = 16
-EPOCHS = 20
+EPOCHS = 40
 LEARNING_RATE = 0.001
 N_MFCCS = 40
 
