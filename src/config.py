@@ -9,8 +9,10 @@ METADATA_PATH = r"C:\Users\Acer\Desktop\SRG\esc-50\esc50.csv"
 MODEL_SAVE_PATH = os.path.join("models", "home_environment_sound.pth")
 LABEL_SAVE_PATH = os.path.join("models", "labels.npy")
 BASE_DIR = r"C:\Users\Acer\Desktop\SRG"
-MFCC_PATH = os.path.join(BASE_DIR, "MFCCS.npy")
-NP_LABELS_PATH = os.path.join(BASE_DIR, "LABELS.npy")
+MFCC_PATH = os.path.join(BASE_DIR,"data_folder","MFCCS.npy")
+NP_LABELS_PATH = os.path.join(BASE_DIR,"data_folder","LABELS.npy")
+TRAIN_MEAN_PATH = os.path.join(BASE_DIR, "data_folder", "train_mean.npy")
+TRAIN_STD_PATH = os.path.join(BASE_DIR, "data_folder", "train_std.npy")
 
 TARGET_CLASSES = [
     'crackling_fire',
@@ -46,7 +48,6 @@ NUM_SAMPLES = int(SAMPLE_RATE * DURATION)
 
 N_FFT = 512
 HOP_LENGTH = 256
-N_MELS = 13
 
 BATCH_SIZE = 16
 EPOCHS = 40

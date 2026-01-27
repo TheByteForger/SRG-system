@@ -1,3 +1,4 @@
+#train.py
 import os
 import torch
 import torch.nn as nn
@@ -5,6 +6,8 @@ import src.config as config
 from src.model import HomeAudioCNN
 import torch.optim as optim
 from dataset_loader import get_dataloaders
+
+config.seed_everything()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 device = config.DEVICE
@@ -94,13 +97,29 @@ def validate(model, loader, criterion, device):
     return avg_loss, avg_acc
 
 best_val_acc = 0.0
+train_loss_list = []
+training_accuracy_list = []
+val_loss_list = []
+val_acc_list = []
 for epoch in range(config.EPOCHS):
     train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, device)
-    val_loss, val_acc = validate(model, val_loader, criterion, device)  
+    val_loss, val_acc = validate(model, val_loader, criterion, device) 
+
+    train_loss_list.append(train_loss)
+    training_accuracy_list.append(train_acc)
+    val_acc_list.append(val_acc)
+    val_loss_list.append(val_loss) 
 
     print(
         f"Epoch [{epoch+1}/{config.EPOCHS}] "
         f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} "
         f"Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}"
     )
+
+    if val_acc > best_val_acc:
+        best_val_acc = val_acc
+        torch.save(model.state_dict(), config.MODEL_SAVE_PATH)
+
+print(f"\nBest Validation Accuracy: {best_val_acc: .4f}")
+print(f"Model saved to: {config.MODEL_SAVE_PATH}")
 

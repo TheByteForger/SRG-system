@@ -1,3 +1,4 @@
+#dataset.py
 import numpy as np
 import pandas as pd
 import librosa
@@ -20,16 +21,16 @@ def compute_mfcc_from_audio(audio, sr=config.SAMPLE_RATE, n_mfcc=config.N_MFCCS,
         mfcc = mfcc[:, :max_len]
     return mfcc
 
-def normalize_mfcc(mfcc):
-    mean = mfcc.mean()
-    std = mfcc.std()
-    normalized_mfccs = (mfcc - mean)/std
-    return normalized_mfccs
+# def normalize_mfcc(mfcc):
+#     mean = mfcc.mean()
+#     std = mfcc.std()
+#     normalized_mfccs = (mfcc - mean)/(std + 1e-6)
+#     return normalized_mfccs
 
 
-if os.path.exists("MFCCS.npy") and os.path.exists("LABELS.npy"):
-    MFCCs = np.load("MFCCS.npy")
-    Labels = np.load("LABELS.npy")
+if os.path.exists(config.MFCC_PATH) and os.path.exists(config.NP_LABELS_PATH):
+    MFCCs = np.load(config.MFCC_PATH)
+    Labels = np.load(config.NP_LABELS_PATH)
 else:
     mfcc_list = []
     labels = []
@@ -40,10 +41,9 @@ else:
         label = encoded_label[class_name]
         audio, _ = librosa.load(file, sr=sr)
         mfcc = compute_mfcc_from_audio(audio)
-        mfcc_list.append(normalize_mfcc(mfcc))
+        mfcc_list.append(mfcc)
         labels.append(label)
-    mfcc_list = np.array(mfcc_list, dtype=np.float32)
-    mfcc_list = mfcc_list[:, np.newaxis, :, :]
+    mfcc_list = np.array(mfcc_list, dtype=np.float32)[:, None, :, :]
     labels = np.array(labels, dtype= np.int64)
 
     np.save(config.MFCC_PATH, mfcc_list)
@@ -53,7 +53,3 @@ else:
     print(f"First MFCC shape: {mfcc_list[0].shape}")
     print(f"First MFCC sample:\n{mfcc_list[0]}")
     print(f"First label: {labels[0]}")
-
-
-
-

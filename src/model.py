@@ -1,3 +1,4 @@
+#model.py
 import torch.nn as nn
 from src import config
 
