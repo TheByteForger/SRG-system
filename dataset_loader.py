@@ -103,7 +103,7 @@ def get_dataloaders(batch_size=config.BATCH_SIZE, mfcc_file=config.MFCC_PATH, la
 
     train_dataset = MFCCDataset(X_train, y_train, augment= True)
     val_dataset   = MFCCDataset(X_val, y_val, augment= False)
-    test_dataset  = MFCCDataset(X_test, y_test, augment= False)
+    test_dataset  = MFCCDataset(X_train, y_train, augment= False)
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader   = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
