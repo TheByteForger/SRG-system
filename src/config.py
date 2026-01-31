@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 import torch
 
-DATASET_ROOT = r"C:\Users\Acer\Desktop\SRG\esc-50\audio\audio\44100"
-METADATA_PATH = r"C:\Users\Acer\Desktop\SRG\esc-50\esc50.csv"
+DATASET_ROOT = r"C:\Users\Acer\Desktop\minor project\SRG-system\esc-50\audio\audio\44100"
+METADATA_PATH = r"C:\Users\Acer\Desktop\minor project\SRG-system\esc-50\esc50.csv"
 MODEL_SAVE_PATH = os.path.join("models", "home_environment_sound.pth")
 LABEL_SAVE_PATH = os.path.join("models", "labels.npy")
-BASE_DIR = r"C:\Users\Acer\Desktop\SRG"
+BASE_DIR = r"C:\Users\Acer\Desktop\minor project\SRG-system"
 MFCC_PATH = os.path.join(BASE_DIR,"data_folder","MFCCS.npy")
 NP_LABELS_PATH = os.path.join(BASE_DIR,"data_folder","LABELS.npy")
 TRAIN_MEAN_PATH = os.path.join(BASE_DIR, "data_folder", "train_mean.npy")
