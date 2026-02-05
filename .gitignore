@@ -1,8 +1,15 @@
 *.wav
 
-*.pyc
-__pycache__/
-
-.DS_Store
+esc-50/audio/
 
 *.npy
+
+data_folder/
+
+*.pth
+*.pt
+
+
+__pycache__/
+*.pyc
+.DS_Store

@@ -20,7 +20,7 @@ TARGET_CLASSES = [
     'rain',
     'crying_baby',
     'door_wood_knock',
-    'door_wood_creaks',
+    'clapping',
     'glass_breaking',
     'siren',
     'clock_alarm',
@@ -51,9 +51,13 @@ N_FFT = 512
 HOP_LENGTH = 256
 
 BATCH_SIZE = 16
-EPOCHS = 40
-LEARNING_RATE = 0.001
+EPOCHS = 50
+LEARNING_RATE = 0.001406
 N_MFCCS = 40
+
+DROPOUT_RATE = 0.4638
+BASE_FILTERS = 8
+WEIGHT_DECAY = 7.5e-5
 
 DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -61,7 +65,7 @@ decoder = {0: 'crackling_fire',
            1: 'rain', 
            2: 'crying_baby', 
            3: 'door_wood_knock', 
-           4: 'door_wood_creaks', 
+           4: 'clapping', 
            5: 'glass_breaking', 
            6: 'siren', 
            7: 'clock_alarm', 
@@ -72,10 +76,9 @@ encoder = {'crackling_fire': 0,
     'rain': 1,
     'crying_baby': 2,
     'door_wood_knock': 3,
-    'door_wood_creaks': 4,
+    'clapping': 4,
     'glass_breaking': 5,
     'siren': 6,
     'clock_alarm': 7,
     'dog': 8,
     'cat': 9}
-
